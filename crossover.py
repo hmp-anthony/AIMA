@@ -32,6 +32,35 @@ def cycle_crossover(A, B):
     
     return child
 
+def partially_mapped_crossover(A, B):
+    n = len(A)
+    left = random.randint(0, n)
+    right = random.randint(0, n)
+    if left > right:
+        left, right = right, left
+    AS = A[left : right]
+    BS = B[left : right]
+    A[left : right] = BS
+    B[left : right] = AS
+
+    # create mapping
+    map_1 = {}
+    map_2 = {}
+    for i in range(left, right):
+        map_1[A[i]] = B[i]
+        map_2[B[i]] = A[i]
+
+    # map duplicates
+    R = list(range(left)) + list(range(right, n))
+    for i in R:
+        while A[i] in BS:
+            A[i] = map_1[A[i]]
+        while B[i] in AS:
+            B[i] = map_2[B[i]]
+    print(R)
+    return A
+     
+
 
 A = ['A', 'B', 'C', 'T', 'D', 'E', 'F', 'G', 'Z', 'R', 'Y', 'Q', 'M', 'N']
 B = ['R', 'A', 'M', 'N', 'D', 'G', 'B', 'F', 'E', 'C', 'T', 'Y', 'Z', 'Q']
@@ -39,6 +68,14 @@ B = ['R', 'A', 'M', 'N', 'D', 'G', 'B', 'F', 'E', 'C', 'T', 'Y', 'Z', 'Q']
 #A = [1,2,3,4,5,6,7,8,9,10]
 #B = [5,6,7,8,9,10,1,2,3,4]
 
-print(cycle_crossover(A, B))
+A = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+B = [2, 4, 6, 8, 7, 5, 3, 1]
+B = [3, 7, 5, 1, 6, 8, 2, 4, 9]
+
+#print(cycle_crossover(A, B))
+print(A)
+print(B)
+print("algorithm output ===")
+print(partially_mapped_crossover(A, B))
 
 
