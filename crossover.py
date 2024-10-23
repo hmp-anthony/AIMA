@@ -57,8 +57,7 @@ def partially_mapped_crossover(A, B):
             A[i] = map_1[A[i]]
         while B[i] in AS:
             B[i] = map_2[B[i]]
-    print(R)
-    return A
+    return random.choice([A,B])
      
 
 
@@ -72,10 +71,12 @@ B = ['R', 'A', 'M', 'N', 'D', 'G', 'B', 'F', 'E', 'C', 'T', 'Y', 'Z', 'Q']
 #B = [2, 4, 6, 8, 7, 5, 3, 1]
 #B = [3, 7, 5, 1, 6, 8, 2, 4, 9]
 
-#print(cycle_crossover(A, B))
 print(A)
 print(B)
 print("algorithm output ===")
+print("cycle crossover")
+print(cycle_crossover(A, B))
+print("partially mapped")
 print(partially_mapped_crossover(A, B))
 
 
