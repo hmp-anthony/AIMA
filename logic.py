@@ -1346,7 +1346,7 @@ class WumpusKB(PropKB):
 
     def make_action_sentence(self, action, time):
         actions = [move_forward(time), shoot(time), turn_left(time), turn_right(time)]
-
+        print(action)
         for a in actions:
             if action is a:
                 self.tell(action)
