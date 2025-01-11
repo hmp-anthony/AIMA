@@ -79,7 +79,7 @@ class Agent(Thing):
     which is a number giving the performance measure of the agent in its
     environment."""
 
-    def __init__(self, program=None):
+    def __init__(self):
         self.alive = True
         self.bump = False
         self.holding = []
@@ -882,7 +882,7 @@ class WumpusEnvironment(XYEnvironment):
 
         "WUMPUS"
         w_x, w_y = self.random_location_inbounds(exclude=(1, 1))
-        self.add_thing(Wumpus(lambda x: ""), (w_x, w_y), True)
+        self.add_thing(Wumpus(), (w_x, w_y), True)
         self.add_thing(Stench(), (w_x - 1, w_y), True)
         self.add_thing(Stench(), (w_x + 1, w_y), True)
         self.add_thing(Stench(), (w_x, w_y - 1), True)
@@ -1001,65 +1001,3 @@ class WumpusEnvironment(XYEnvironment):
         return True
         
     # TODO: Arrow needs to be implemented
-
-
-# ______________________________________________________________________________
-
-
-def compare_agents(EnvFactory, AgentFactories, n=10, steps=1000):
-    """See how well each of several agents do in n instances of an environment.
-    Pass in a factory (constructor) for environments, and several for agents.
-    Create n instances of the environment, and run each agent in copies of
-    each one for steps. Return a list of (agent, average-score) tuples.
-    >>> environment = TrivialVacuumEnvironment
-    >>> agents = [ModelBasedVacuumAgent, ReflexVacuumAgent]
-    >>> result = compare_agents(environment, agents)
-    >>> performance_ModelBasedVacuumAgent = result[0][1]
-    >>> performance_ReflexVacuumAgent = result[1][1]
-    >>> performance_ReflexVacuumAgent <= performance_ModelBasedVacuumAgent
-    True
-    """
-    envs = [EnvFactory() for i in range(n)]
-    return [(A, test_agent(A, steps, copy.deepcopy(envs)))
-            for A in AgentFactories]
-
-
-def test_agent(AgentFactory, steps, envs):
-    """Return the mean score of running an agent in each of the envs, for steps
-    >>> def constant_prog(percept):
-    ...     return percept
-    ...
-    >>> agent = Agent(constant_prog)
-    >>> result = agent.program(5)
-    >>> result == 5
-    True
-    """
-
-    def score(env):
-        agent = AgentFactory()
-        env.add_thing(agent)
-        env.run(steps)
-        return agent.performance
-
-    return mean(map(score, envs))
-
-
-# _________________________________________________________________________
-
-
-__doc__ += """
->>> a = ReflexVacuumAgent()
->>> a.program((loc_A, 'Clean'))
-'Right'
->>> a.program((loc_B, 'Clean'))
-'Left'
->>> a.program((loc_A, 'Dirty'))
-'Suck'
->>> a.program((loc_A, 'Dirty'))
-'Suck'
-
->>> e = TrivialVacuumEnvironment()
->>> e.add_thing(ModelBasedVacuumAgent())
->>> e.run(5)
-
-"""
